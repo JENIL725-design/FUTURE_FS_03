@@ -1,36 +1,82 @@
+# 🎮 Ultimate Game Store (Internship Task)
+
+A modern, high-performance game distribution platform built with **Next.js 15**, **Tailwind CSS**, and **Firebase**.
+
+This project features a fully dynamic frontend that fetches game data (titles, prices, images) from a Firestore backend, wrapped in a responsive, cyberpunk-themed user interface.
+
+## 🚀 Tech Stack
+
+* **Frontend:** Next.js (App Router), React
+* **Styling:** Tailwind CSS
+* **Backend:** Firebase (Firestore Database)
+* **Optimization:** Next.js Image Optimization, Dynamic Imports
+* **Deployment:** Netlify / Vercel
+
+## ✨ Key Features
+
+* **Dynamic Data Fetching:** All game cards (GTA V, God of War, etc.) are fetched in real-time from Firebase Firestore.
+* **Responsive Design:** Fully optimized for Desktop, Tablet, and Mobile (includes a custom hamburger menu).
+* **High Performance:** Uses local image assets in the `public` folder for zero-latency loading.
+* **Cyberpunk UI:** Custom neon glow effects, glassmorphism, and smooth hover animations.
+* **Error Handling:** Smart image fallbacks (Safety Net) if a game image fails to load.
+
+## 📂 Folder Structure
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+Markdown
+# 🎮 Ultimate Game Store (Internship Task)
 
-First, run the development server:
+A modern, high-performance game distribution platform built with **Next.js 15**, **Tailwind CSS**, and **Firebase**.
 
+This project features a fully dynamic frontend that fetches game data (titles, prices, images) from a Firestore backend, wrapped in a responsive, cyberpunk-themed user interface.
+
+## 🚀 Tech Stack
+
+* **Frontend:** Next.js (App Router), React
+* **Styling:** Tailwind CSS
+* **Backend:** Firebase (Firestore Database)
+* **Optimization:** Next.js Image Optimization, Dynamic Imports
+* **Deployment:** Netlify / Vercel
+
+## ✨ Key Features
+
+* **Dynamic Data Fetching:** All game cards (GTA V, God of War, etc.) are fetched in real-time from Firebase Firestore.
+* **Responsive Design:** Fully optimized for Desktop, Tablet, and Mobile (includes a custom hamburger menu).
+* **High Performance:** Uses local image assets in the `public` folder for zero-latency loading.
+* **Cyberpunk UI:** Custom neon glow effects, glassmorphism, and smooth hover animations.
+* **Error Handling:** Smart image fallbacks (Safety Net) if a game image fails to load.
+
+## 📂 Folder Structure
+
+├── public/ # Local static assets (Game images) ├── src/ │ ├── app/ # Next.js App Router pages │ ├── components/ # Reusable UI components (Navbar, Footer) │ └── lib/ # Firebase configuration └── package.json # Project dependencies
+
+
+## 🛠️ Getting Started
+
+Follow these steps to run the project locally on your machine.
+
+### 1. Clone the Repository
 ```bash
+git clone [https://github.com/YOUR_USERNAME/future_fs_03.git](https://github.com/YOUR_USERNAME/future_fs_03.git)
+cd future_fs_03
+2. Install Dependencies
+Bash
+npm install
+3. Run the Development Server
+Bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open http://localhost:3000 with your browser to see the result.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🔥 Firebase Configuration
+To connect your own database, update the src/lib/firebase.js (or firebaseConfig.js) file with your own Firebase credentials:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+JavaScript
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "future-interns-steam.firebaseapp.com",
+  projectId: "future-interns-steam",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};
+Developed by [Jenil]
