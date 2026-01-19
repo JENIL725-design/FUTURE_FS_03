@@ -128,7 +128,7 @@ export default function UltimateStore() {
       <section className="max-w-7xl mx-auto px-6 pb-32 relative z-10">
         <div className="flex items-center gap-4 mb-12">
           <div className="h-[2px] w-10 bg-[#bf00ff]"></div>
-          <h2 className="font-cyber text-3xl font-bold uppercase">Database Entries</h2>
+          <h2 className="font-cyber text-3xl font-bold uppercase">Latest Titles</h2>
         </div>
 
         {loading ? (
@@ -151,7 +151,7 @@ export default function UltimateStore() {
                 className="group relative bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden cursor-pointer"
               >
                 {/* Image */}
-                <div className="h-[300px] overflow-hidden relative">
+                <div className="h-[400px] overflow-hidden relative">
                    <div className="absolute inset-0 bg-[#bf00ff]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
                    <img src={game.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:grayscale-0 grayscale" />
                 </div>
