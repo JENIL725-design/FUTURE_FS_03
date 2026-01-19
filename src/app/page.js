@@ -1,22 +1,35 @@
 'use client';
-import Image from 'next/image'; 
+
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase'; 
 import { collection, getDocs } from 'firebase/firestore';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Gamepad2, Zap, ShoppingCart, Search, Menu, X, Cpu } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Gamepad2, Zap, ShoppingCart, Search, Menu, Cpu } from 'lucide-react';
 
 // --- CSS FOR GLITCH & CRT EFFECTS ---
 const globalStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+  
   .font-cyber { font-family: 'Orbitron', sans-serif; }
   .font-tech { font-family: 'Rajdhani', sans-serif; }
+  
+  /* CRT SCANLINE OVERLAY */
   .scanlines {
-    background: linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.2) 50%,rgba(0,0,0,0.2));
+    background: linear-gradient(
+      to bottom,
+      rgba(255,255,255,0),
+      rgba(255,255,255,0) 50%,
+      rgba(0,0,0,0.2) 50%,
+      rgba(0,0,0,0.2)
+    );
     background-size: 100% 4px;
-    position: fixed; pointer-events: none; inset: 0; z-index: 90;
+    position: fixed;
+    pointer-events: none;
+    inset: 0;
+    z-index: 90;
   }
-  .glitch-hover:hover { animation: glitch 0.3s infinite; }
+
+  /* GLITCH TEXT ANIMATION */
   @keyframes glitch {
     0% { text-shadow: 2px 0 #ff00ea, -2px 0 #00eaff; }
     25% { text-shadow: -2px 0 #ff00ea, 2px 0 #00eaff; }
@@ -24,19 +37,21 @@ const globalStyles = `
     75% { text-shadow: -2px 0 #ff00ea, 2px 0 #00eaff; }
     100% { text-shadow: 2px 0 #ff00ea, -2px 0 #00eaff; }
   }
+  .glitch-hover:hover {
+    animation: glitch 0.3s infinite;
+  }
 `;
 
 export default function UltimateStore() {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Mobile Menu State
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "games"));
         setGames(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-        setTimeout(() => setLoading(false), 2000); 
+        setTimeout(() => setLoading(false), 2000); // Cinematic delay
       } catch (error) {
         console.error("Error:", error);
         setLoading(false);
@@ -48,96 +63,72 @@ export default function UltimateStore() {
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden relative">
       <style>{globalStyles}</style>
+      
+      {/* CRT OVERLAY */}
       <div className="scanlines"></div>
       
       {/* BACKGROUND NEON GLOWS */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#bf00ff] rounded-full opacity-5"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#00f0ff] rounded-full opacity-5"></div>
-      </div>
+      <div className="fixed top-0 left-0 w-[500px] h-[500px] bg-[#bf00ff] rounded-full filter blur-[150px] opacity-10 animate-pulse"></div>
+      <div className="fixed bottom-0 right-0 w-[500px] h-[500px] bg-[#00f0ff] rounded-full filter blur-[150px] opacity-10 animate-pulse"></div>
 
       {/* --- NAVBAR --- */}
-      <nav className="fixed w-full z-50 px-6 py-5 bg-[#050505]/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center">
-        <div className="flex items-center gap-3 group cursor-pointer z-50">
+      <nav className="fixed w-full z-50 px-8 py-5 bg-[#050505]/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center">
+        <div className="flex items-center gap-3 group cursor-pointer">
           <div className="w-10 h-10 bg-gradient-to-br from-[#bf00ff] to-[#00f0ff] rounded flex items-center justify-center transform group-hover:rotate-180 transition-transform duration-500">
             <Cpu className="text-white w-6 h-6" />
           </div>
-          <span className="font-cyber text-lg md:text-2xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+          <span className="font-cyber text-2xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 glitch-hover">
             CYBER<span className="text-[#00f0ff]">STORE</span>
           </span>
         </div>
         
-        {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 font-tech text-lg tracking-wide text-gray-400">
-          {['GAMES', 'HARDWARE', 'COMMUNITY'].map((item) => (
+          {['GAMES', 'HARDWARE', 'COMMUNITY', 'PROFILE'].map((item) => (
             <a key={item} href="#" className="hover:text-[#00f0ff] hover:shadow-[0_0_15px_#00f0ff] transition-all duration-300">
               {item}
             </a>
           ))}
         </div>
 
-        {/* Mobile Icons */}
-        <div className="flex items-center gap-6 z-50">
+        <div className="flex items-center gap-6">
           <Search className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer" />
           <div className="relative group">
-            <ShoppingCart className="w-5 h-5 text-gray-400 hover:text-[#bf00ff] cursor-pointer" />
+            <ShoppingCart className="w-5 h-5 text-gray-400 hover:text-[#bf00ff] cursor-pointer transition-colors" />
             <span className="absolute -top-3 -right-3 w-5 h-5 bg-[#bf00ff] rounded-sm text-[10px] flex items-center justify-center font-bold">0</span>
-          </div>
-          {/* Hamburger Icon */}
-          <div className="md:hidden text-white cursor-pointer" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
           </div>
         </div>
       </nav>
 
-      {/* --- MOBILE MENU OVERLAY --- */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div 
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
-          >
-            {['GAMES', 'HARDWARE', 'COMMUNITY', 'PROFILE'].map((item) => (
-              <a key={item} href="#" className="font-cyber text-3xl text-white hover:text-[#00f0ff] tracking-widest">
-                {item}
-              </a>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* --- HERO SECTION --- */}
-      <header className="relative pt-32 pb-10 px-4 max-w-7xl mx-auto text-center z-10">
+      <header className="relative pt-40 pb-20 px-6 max-w-7xl mx-auto text-center z-10">
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1 }}
         >
-          <div className="inline-block border border-[#00f0ff] bg-[#00f0ff]/10 text-[#00f0ff] px-4 py-1 font-cyber text-[10px] md:text-xs tracking-[0.3em] mb-6 rounded">
+          <div className="inline-block border border-[#00f0ff] bg-[#00f0ff]/10 text-[#00f0ff] px-4 py-1 font-cyber text-xs tracking-[0.3em] mb-6 rounded">
             SYSTEM ONLINE_
           </div>
-          <h1 className="font-cyber text-4xl md:text-8xl font-black uppercase mb-6 leading-none">
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#bf00ff] to-[#00f0ff]">
+          <h1 className="font-cyber text-5xl md:text-8xl font-black uppercase mb-6 leading-none">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#bf00ff] to-[#00f0ff] glitch-hover">
               Future
             </span>
-            <span className="block text-white">Gaming</span>
+            <span className="block text-white glitch-hover">Gaming</span>
           </h1>
-          <p className="font-tech text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-            Access the neural network. Download experiences directly to your cortex.
+          <p className="font-tech text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+            Dive into the neural network. Download the latest experiences directly to your cortex.
           </p>
-          <button className="bg-[#00f0ff] text-black font-cyber font-bold px-8 py-3 md:px-10 md:py-4 uppercase tracking-wider hover:bg-white hover:shadow-[0_0_40px_rgba(0,240,255,0.6)] transition-all skew-x-[-10deg]">
-             Initialize
+          <button className="bg-[#00f0ff] text-black font-cyber font-bold px-10 py-4 uppercase tracking-wider hover:bg-white hover:shadow-[0_0_40px_rgba(0,240,255,0.6)] transition-all skew-x-[-10deg]">
+             Initialize Download
           </button>
         </motion.div>
       </header>
 
       {/* --- GAME GRID --- */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 pb-32 relative z-10">
+      <section className="max-w-7xl mx-auto px-6 pb-32 relative z-10">
         <div className="flex items-center gap-4 mb-12">
           <div className="h-[2px] w-10 bg-[#bf00ff]"></div>
-          <h2 className="font-cyber text-2xl md:text-3xl font-bold uppercase">Database Entries</h2>
+          <h2 className="font-cyber text-3xl font-bold uppercase">Database Entries</h2>
         </div>
 
         {loading ? (
@@ -161,15 +152,8 @@ export default function UltimateStore() {
               >
                 {/* Image */}
                 <div className="h-[300px] overflow-hidden relative">
-                  <div className="absolute inset-0 bg-[#bf00ff]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
-                  
-                  <Image 
-                      src={game.image || "https://images.unsplash.com/photo-1550745165-9bc0b252726f"} 
-                      alt={game.title}
-                      fill={true} // <--- This is the magic. It fills the container automatically.
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:grayscale-0 grayscale"
-                  />
+                   <div className="absolute inset-0 bg-[#bf00ff]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                   <img src={game.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:grayscale-0 grayscale" />
                 </div>
                 
                 {/* Content */}
@@ -198,7 +182,10 @@ export default function UltimateStore() {
 
       {/* FOOTER */}
       <footer className="border-t border-white/5 bg-[#050505] py-10 text-center relative overflow-hidden">
-        <p className="text-gray-600 font-tech text-xs">© 2026 SYSTEM ARCHITECTURE.</p>
+        <div className="text-[#00f0ff] font-cyber text-4xl font-black opacity-5 select-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          CYBERSTORE
+        </div>
+        <p className="text-gray-600 font-tech">© 2026 SYSTEM ARCHITECTURE. ALL RIGHTS RESERVED.</p>
       </footer>
     </div>
   );
